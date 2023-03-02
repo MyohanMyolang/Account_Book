@@ -1,4 +1,5 @@
 import 'package:account_book/widgets/account_book_graph.dart';
+import 'package:account_book/widgets/add_ab_btn.dart';
 import 'package:flutter/material.dart';
 
 class AccountBookDetail extends StatefulWidget {
@@ -12,6 +13,7 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: const AddABFloatingBtn(),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
