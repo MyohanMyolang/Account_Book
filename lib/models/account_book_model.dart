@@ -6,8 +6,32 @@ class ABModel {
   late String category;
   late String date;
 
-  String encodeJson() {
-    return "";
+  ABModel({
+    required this.isExpanse,
+    required this.index,
+    required this.money,
+    required this.descript,
+    required this.category,
+    required this.date,
+  });
+
+  ABModel.fromJson(Map<String, dynamic> data)
+      : isExpanse = data["isExpanse"],
+        index = data["index"],
+        money = data["money"],
+        descript = data["descript"],
+        category = data["category"],
+        date = data["date"];
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {};
+    data["isExpanse"] = isExpanse;
+    data["index"] = index;
+    data["money"] = money;
+    data["descript"] = descript;
+    data["category"] = category;
+    data["date"] = date;
+    return data;
   }
 }
 
