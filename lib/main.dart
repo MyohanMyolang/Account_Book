@@ -16,15 +16,15 @@ class AccountBook extends StatefulWidget {
 
 class _AccountBookState extends State<AccountBook> {
   // This widget is the root of your application.
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   static const TextStyle optionStyle = TextStyle(
     fontSize: 40,
     fontWeight: FontWeight.bold,
   );
   static const List<Widget> _widgetOptions = <Widget>[
+    AboutScreen(),
     HomeScreen(),
     SettingScreen(),
-    AboutScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -36,8 +36,27 @@ class _AccountBookState extends State<AccountBook> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark(),
       home: Scaffold(
         body: _widgetOptions.elementAt(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.question_mark),
+              label: 'About',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Setting',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
