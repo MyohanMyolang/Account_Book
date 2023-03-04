@@ -8,9 +8,7 @@ class AddABFloatingBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.small(
-      onPressed: () {
-        print("floatingActionButton");
-      },
+      onPressed: () {},
       tooltip: "Add AB",
       child: const Icon(Icons.add),
     );

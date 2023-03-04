@@ -1,9 +1,20 @@
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'account_book_model.g.dart';
+
+@HiveType(typeId: 0)
 class ABModel {
+  @HiveField(0)
   late bool isExpanse;
+  @HiveField(1)
   late int index;
+  @HiveField(2)
   late int money;
+  @HiveField(3)
   late String descript;
+  @HiveField(4)
   late String category;
+  @HiveField(5)
   late String date;
 
   ABModel({
