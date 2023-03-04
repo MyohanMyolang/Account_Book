@@ -25,7 +25,7 @@ class ABDataController {
     }
   }
 
-  Future<void> init() async {
+  void init() async {
     await _hiveInit();
     _dataList = {};
   }
@@ -43,7 +43,10 @@ class ABDataController {
     if (indexList != null) {
       List<ABModel> models = [];
       for (int index in indexList) {
-        models.add(modelBox.get(index));
+        ABModel? model = modelBox.get("$index");
+        if (model != null) {
+          models.add(model);
+        }
       }
       _dataList[date] = models;
       return true;
@@ -80,7 +83,7 @@ class ABDataController {
     bool hasData = checkHasData(data.date);
     if (hasData) {
       _dataList[data.date]!.add(data);
-      modelBox.put(data.index, data);
+      modelBox.put("${data.index}", data);
 
       List<int> dateList = modelBox.get(data.date, defaultValue: []);
       dateList.add(data.index);
