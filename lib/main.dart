@@ -1,9 +1,11 @@
+import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/screens/about_screen.dart';
 import 'package:account_book/screens/home_screen.dart';
 import 'package:account_book/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  ABDataController();
   runApp(const AccountBook());
 }
 

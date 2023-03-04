@@ -1,14 +1,13 @@
 import 'package:account_book/models/account_book_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-// TODO: Hive 라이브러리 사용법 익히고 이 프로젝트에 적용 시켜보기.
-
 typedef DataList = Map<String, List<ABModel>>;
 
 class ABDataController {
   late DataList _dataList;
   late final Box modelBox;
   late int index;
+  static const String DATE_FORMAT = "yy/MM/dd";
 
   static final ABDataController _instance = ABDataController._();
 
@@ -28,6 +27,7 @@ class ABDataController {
 
   Future<void> init() async {
     await _hiveInit();
+    _dataList = {};
   }
 
   ABDataController._() {
@@ -38,14 +38,28 @@ class ABDataController {
     return _instance;
   }
 
-  void _getDayDataFromHive(String date) {
-    List<int>? indexList = modelBox.get("date");
+  bool _getDayDataFromHive(String date) {
+    List<int>? indexList = modelBox.get(date);
     if (indexList != null) {
       List<ABModel> models = [];
       for (int index in indexList) {
         models.add(modelBox.get(index));
       }
+      _dataList[date] = models;
+      return true;
     }
+
+    return false;
+  }
+
+  void _setDayDataToHive(String date) {
+    List<int> indexList = [];
+
+    _dataList[date]?.forEach((element) {
+      indexList.add(element.index);
+    });
+
+    modelBox.put(date, indexList);
   }
 
   bool checkHasData(String date) {
@@ -55,14 +69,16 @@ class ABDataController {
       if (key == date) hasData = true;
     }
 
-    if (!hasData) {}
+    if (!hasData) {
+      hasData = _getDayDataFromHive(date);
+    }
 
     return hasData;
   }
 
   void addData(ABModel data) {
     bool hasData = checkHasData(data.date);
-    if (null != _dataList[data.date]) {
+    if (hasData) {
       _dataList[data.date]!.add(data);
       modelBox.put(data.index, data);
 
@@ -74,18 +90,31 @@ class ABDataController {
       modelBox.put(data.date, [data.index]);
     }
     index++;
+    modelBox.put("index", index);
   }
 
-  void SaveDataToFile() {
-    // TODO: 파일 저장 로직 작성 // List<String>에 jsonEncode를 이용하여 값을 하나하나 넣는다.
+  /*
+   * 기록되지 않은 날짜가 있을 경우 Null을 반환.
+   */
+  List<ABModel>? getDayDatas(String date) {
+    bool hasData = checkHasData(date);
+    if (hasData) {
+      return _dataList[date]!;
+    }
+
+    return null;
   }
 
-  void SaveAll() {
-    // _dataList에서 foreach문을 사용하여 감싸기
-    // modelBox.put(model.index, model);
-    // modelBox.put(model.date, model.index);
+  // 이하 Test용 추후 삭제
+  void removeAllData() {
+    modelBox.clear();
+  }
+
+  void showAllDateListKeys() {
+    print(_dataList.keys.toList());
   }
 }
+
 
 
 

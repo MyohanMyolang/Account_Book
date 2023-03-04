@@ -44,6 +44,11 @@ class ABModel {
     data["date"] = date;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'ABModel{isExpanse: $isExpanse, index: $index, money: $money, descript: $descript, category: $category, date: $date}';
+  }
 }
 
 
