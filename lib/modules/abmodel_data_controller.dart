@@ -7,33 +7,23 @@ typedef DataList = Map<String, List<ABModel>>;
 
 class ABDataController {
   late DataList _dataList;
-  late final Box<ABModel> modelBox;
+  late final Box modelBox;
+  late int index;
 
   static final ABDataController _instance = ABDataController._();
-
-  void TestPutFunction() {
-    modelBox.put(
-        1,
-        ABModel(
-          isExpanse: true,
-          index: 1,
-          money: 100,
-          descript: "이유이옵니다.",
-          category: "카테고리",
-          date: "2023.12.21",
-        ));
-  }
-
-  void TestGetFunction() {
-    ABModel? a = modelBox.get(1);
-    print(a!.category);
-  }
 
   Future<void> _hiveInit() async {
     await Hive.initFlutter();
     Hive.registerAdapter(ABModelAdapter());
 
     modelBox = await Hive.openBox("ABBox");
+    int? isNull = modelBox.get("index");
+    if (isNull != null) {
+      index = isNull;
+    } else {
+      modelBox.put("index", 0);
+      index = 0;
+    }
   }
 
   Future<void> init() async {
@@ -48,8 +38,42 @@ class ABDataController {
     return _instance;
   }
 
-  void AddData(ABModel data) {
-    List test;
+  void _getDayDataFromHive(String date) {
+    List<int>? indexList = modelBox.get("date");
+    if (indexList != null) {
+      List<ABModel> models = [];
+      for (int index in indexList) {
+        models.add(modelBox.get(index));
+      }
+    }
+  }
+
+  bool checkHasData(String date) {
+    bool hasData = false;
+
+    for (String key in _dataList.keys) {
+      if (key == date) hasData = true;
+    }
+
+    if (!hasData) {}
+
+    return hasData;
+  }
+
+  void addData(ABModel data) {
+    bool hasData = checkHasData(data.date);
+    if (null != _dataList[data.date]) {
+      _dataList[data.date]!.add(data);
+      modelBox.put(data.index, data);
+
+      List<int> dateList = modelBox.get(data.date, defaultValue: []);
+      dateList.add(data.index);
+      modelBox.put(data.date, dateList);
+    } else {
+      _dataList[data.date] = [data];
+      modelBox.put(data.date, [data.index]);
+    }
+    index++;
   }
 
   void SaveDataToFile() {
