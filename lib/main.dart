@@ -35,11 +35,25 @@ class _AccountBookState extends State<AccountBook> {
     });
   }
 
+  bool isDarkTheme = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
+      theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isDarkTheme = !isDarkTheme;
+                });
+              },
+              icon: Icon(isDarkTheme ? Icons.light_mode : Icons.dark_mode),
+            )
+          ],
+        ),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
