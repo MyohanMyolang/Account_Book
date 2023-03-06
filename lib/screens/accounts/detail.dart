@@ -14,6 +14,7 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: const AddABFloatingBtn(),
+      
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,

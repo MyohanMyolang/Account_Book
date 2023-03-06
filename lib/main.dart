@@ -1,5 +1,7 @@
 import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/screens/about_screen.dart';
+import 'package:account_book/screens/accounts/data_page.dart';
+import 'package:account_book/screens/accounts/detail.dart';
 import 'package:account_book/screens/home_screen.dart';
 import 'package:account_book/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,7 @@ class _AccountBookState extends State<AccountBook> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: getRoutes,
       theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         appBar: AppBar(
@@ -75,5 +78,11 @@ class _AccountBookState extends State<AccountBook> {
         ),
       ),
     );
+  }
+
+  Map<String, WidgetBuilder> get getRoutes {
+    return {
+      '/detail': (context) => const AccountBookDetail(),
+    };
   }
 }
