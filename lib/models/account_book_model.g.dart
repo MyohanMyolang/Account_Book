@@ -21,15 +21,14 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
       index: fields[1] as int,
       money: fields[2] as int,
       descript: fields[3] as String,
-      category: fields[4] as String,
-      date: fields[5] as String,
+      date: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ABModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.isExpanse)
       ..writeByte(1)
@@ -39,8 +38,6 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
       ..writeByte(3)
       ..write(obj.descript)
       ..writeByte(4)
-      ..write(obj.category)
-      ..writeByte(5)
       ..write(obj.date);
   }
 

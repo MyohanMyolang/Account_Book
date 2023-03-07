@@ -1,10 +1,10 @@
 import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/screens/about_screen.dart';
-import 'package:account_book/screens/accounts/data_page.dart';
 import 'package:account_book/screens/accounts/detail.dart';
 import 'package:account_book/screens/home_screen.dart';
 import 'package:account_book/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   ABDataController();
@@ -37,11 +37,18 @@ class _AccountBookState extends State<AccountBook> {
     });
   }
 
-  bool isDarkTheme = false;
+  bool isDarkTheme = true;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', "KR"),
+      ], // DatePicker에 한국어가 보이도록 하는 설정.
       routes: getRoutes,
       theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
