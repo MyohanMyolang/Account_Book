@@ -83,15 +83,17 @@ class ABDataController {
     bool hasData = checkHasData(data.date);
     if (hasData) {
       _dataList[data.date]!.add(data);
-      modelBox.put("${data.index}", data);
 
       List<int> dateList = modelBox.get(data.date, defaultValue: []);
       dateList.add(data.index);
       modelBox.put(data.date, dateList);
     } else {
       _dataList[data.date] = [data];
-      modelBox.put(data.date, [data.index]);
+      List<int> indexList = [];
+      indexList.add(data.index);
+      modelBox.put(data.date, indexList);
     }
+    modelBox.put("${data.index}", data);
     index++;
     modelBox.put("index", index);
   }
@@ -108,13 +110,25 @@ class ABDataController {
     return null;
   }
 
+  void removeData(ABModel data) {}
+
+  void _removeItemToDataList(int index) {}
+
+  void _modifyDataToHive(ABModel data) {}
+
+  void _modifyIndexListToHive(ABModel data) {}
+
   // 이하 Test용 추후 삭제
   void removeAllData() {
     modelBox.clear();
   }
 
   void showAllDateListKeys() {
+    getDayDatas("23/03/08");
     print(_dataList.keys.toList());
+    for (var key in _dataList.keys) {
+      print(_dataList[key]);
+    }
   }
 }
 

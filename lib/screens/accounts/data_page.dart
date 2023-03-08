@@ -2,6 +2,8 @@ import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/account_book_model.dart';
+
 enum DataPageType {
   add,
   modify,
@@ -9,10 +11,15 @@ enum DataPageType {
 
 class DataPage extends StatefulWidget {
   final DataPageType type;
+  final ABModel? model;
 
+  /*
+   * type이 modify일 경우, model을 입력해주어야 한다.
+   */
   const DataPage({
     super.key,
     required this.type,
+    this.model,
   });
 
   @override
@@ -20,73 +27,156 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
-  bool isExpanse = true;
+  bool? isExpanse = true;
   String? date;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
-              vertical: 30,
-            ),
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        isExpanse ? "지출" : "수입",
-                        style: const TextStyle(
-                          fontSize: 28,
+    if (widget.type == DataPageType.modify) {
+      isExpanse = widget.model?.isExpanse;
+      date = widget.model?.date;
+    }
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 30,
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isExpanse! ? "지출" : "수입",
+                          style: const TextStyle(
+                            fontSize: 28,
+                          ),
                         ),
-                      ),
-                      Switch(
-                        value: isExpanse,
-                        onChanged: (value) => setState(() {
-                          isExpanse = value;
-                        }),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextField(
-                    "Money",
-                    "금액을 입력하여 주십시오.",
-                    TextInputType.number,
-                  ),
-                  const SizedBox(height: 30),
-                  CustomTextField(
-                    "Description",
-                    "내용을 입력하여 주십시오.",
-                    TextInputType.multiline,
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        date ?? "날짜선택",
-                        style: const TextStyle(
-                          fontSize: 28,
+                        Switch(
+                          value: isExpanse!,
+                          onChanged: (value) => setState(() {
+                            isExpanse = value;
+                          }),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomTextField(
+                      "Money",
+                      "금액을 입력하여 주십시오.",
+                      TextInputType.number,
+                      _moneyCtrl,
+                    ),
+                    const SizedBox(height: 30),
+                    CustomTextField(
+                      "Description",
+                      "내용을 입력하여 주십시오.",
+                      TextInputType.multiline,
+                      _desCtrl,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          date ??= DateFormat(ABDataController.DATE_FORMAT)
+                              .format(DateTime.now()),
+                          style: const TextStyle(
+                            fontSize: 28,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () => _SelectDate(context),
-                        icon: const Icon(Icons.timer_outlined),
-                      )
-                    ],
-                  )
-                ],
+                        IconButton(
+                          onPressed: () => _SelectDate(context),
+                          icon: const Icon(Icons.timer_outlined),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context, null);
+                            },
+                            // style: ButtonStyle(
+                            //   side: MaterialStateProperty.all(
+                            //     BorderSide(
+                            //       color: const Color.fromARGB(255, 205, 114, 89)
+                            //           .withOpacity(0.5),
+                            //       width: 1,
+                            //     ),
+                            //   ),
+                            // ),
+                            child: Text("취소",
+                                style: TextStyle(
+                                    fontSize: 22, color: Colors.red[300])),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              String moneyText =
+                                  _moneyCtrl.text.replaceAll(RegExp('\\D'), "");
+                              if (moneyText != "") {
+                                int money = int.parse(moneyText);
+                                Navigator.pop(
+                                  context,
+                                  ABModel(
+                                    isExpanse: isExpanse!,
+                                    index: ABDataController().index,
+                                    money: money,
+                                    descript: _desCtrl.text,
+                                    date: date!,
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Center(
+                                      child: Text(
+                                        "Money를 입력하여 주십시오.",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text(
+                              "확인",
+                              style: TextStyle(
+                                fontSize: 22,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -109,8 +199,13 @@ class _DataPageState extends State<DataPage> {
     }
   }
 
-  TextField CustomTextField(String label, String hintText, TextInputType type) {
+  final TextEditingController _moneyCtrl = TextEditingController();
+  final TextEditingController _desCtrl = TextEditingController();
+
+  TextField CustomTextField(String label, String hintText, TextInputType type,
+      TextEditingController ctrl) {
     return TextField(
+      controller: ctrl,
       maxLines: null,
       decoration: InputDecoration(
         labelText: label,
@@ -129,6 +224,14 @@ class _DataPageState extends State<DataPage> {
       ),
       keyboardType: type,
     );
+  }
+
+  @override
+  void dispose() {
+    _moneyCtrl.dispose();
+    _desCtrl.dispose();
+
+    super.dispose();
   }
 }
 
