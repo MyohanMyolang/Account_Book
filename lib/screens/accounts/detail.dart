@@ -1,8 +1,12 @@
+import 'package:account_book/models/account_book_model.dart';
 import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/widgets/account_book_graph.dart';
 import 'package:account_book/widgets/add_ab_btn.dart';
+import 'package:account_book/widgets/detail_page_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../modules/date_calc.dart';
 
 class AccountBookDetail extends StatefulWidget {
   const AccountBookDetail({super.key});
@@ -12,14 +16,27 @@ class AccountBookDetail extends StatefulWidget {
 }
 
 class _AccountBookDetailState extends State<AccountBookDetail> {
-  List<String?> dateList = List<String?>.filled(2, null);
+  ABDataController ctrl = ABDataController();
+  List<String> dateList = [];
+  DataList dataList = {};
+
+  // _dateList에서 날짜 값을 받아오고 저장시킨다.
+  // List<ABModel>
+
+  @override
+  void initState() {
+    dateList = ctrl.getRecentDateListFromHive();
+    dataList = DateCalc.getDataList(dateList[0], dateList[1]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: const AddABFloatingBtn(),
       body: SingleChildScrollView(
         child: Container(
-          width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             children: [
@@ -37,13 +54,18 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
                         _SelectDate(context, 0);
                       },
                       child: Text(
-                        dateList[0] ??= DateFormat(ABDataController.DATE_FORMAT)
-                            .format(DateTime.now()),
+                        dateList[0],
                       ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ctrl.setRecentDateListToHive(dateList);
+                      setState(() {
+                        dataList =
+                            DateCalc.getDataList(dateList[0], dateList[1]);
+                      });
+                    },
                     icon: const Icon(Icons.search),
                   ),
                   Expanded(
@@ -52,12 +74,51 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
                         _SelectDate(context, 1);
                       },
                       child: Text(
-                        dateList[1] ??= DateFormat(ABDataController.DATE_FORMAT)
-                            .format(DateTime.now()),
+                        dateList[1],
                       ),
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 30),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.cyan,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text("지출"),
+                    Text("금액"),
+                    Text("날짜"),
+                  ],
+                ),
+              ),
+              ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: dataList.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  String key = dataList.keys.elementAt(index);
+                  List<ABModel> modelList = dataList[key]!;
+
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: modelList.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return DetailItem(model: modelList[index]);
+                    },
+                  );
+                },
               )
             ],
           ),
@@ -70,7 +131,7 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     final DateTime? selected = await showDatePicker(
       context: context,
       initialDate:
-          DateFormat(ABDataController.DATE_FORMAT).parse(dateList[target]!),
+          DateFormat(ABDataController.DATE_FORMAT).parse(dateList[target]),
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     );
@@ -82,7 +143,6 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     }
   }
 }
-
 
 /*
   TODO:

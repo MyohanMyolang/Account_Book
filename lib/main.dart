@@ -6,8 +6,8 @@ import 'package:account_book/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
-  ABDataController();
+void main() async {
+  await ABDataController().init();
   runApp(const AccountBook());
 }
 
@@ -42,6 +42,7 @@ class _AccountBookState extends State<AccountBook> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: const Locale('ko', "KR"),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

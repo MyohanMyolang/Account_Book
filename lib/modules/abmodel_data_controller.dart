@@ -1,5 +1,6 @@
 import 'package:account_book/models/account_book_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 typedef DataList = Map<String, List<ABModel>>;
 
@@ -25,14 +26,12 @@ class ABDataController {
     }
   }
 
-  void init() async {
+  Future<void> init() async {
     await _hiveInit();
     _dataList = {};
   }
 
-  ABDataController._() {
-    init();
-  }
+  ABDataController._();
 
   factory ABDataController() {
     return _instance;
@@ -108,6 +107,21 @@ class ABDataController {
     }
 
     return null;
+  }
+
+  void setRecentDateListToHive(List<String> dates) {
+    modelBox.put("recentDates", dates);
+  }
+
+  List<String> getRecentDateListFromHive() {
+    List<String>? dates = modelBox.get("recentDates");
+    if (dates != null) return dates;
+
+    dates = [];
+    dates.add(DateFormat(DATE_FORMAT).format(DateTime.now()));
+    dates.add(DateFormat(DATE_FORMAT).format(DateTime.now()));
+
+    return dates;
   }
 
   void removeData(ABModel data) {}
