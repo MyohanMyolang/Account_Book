@@ -30,11 +30,17 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     super.initState();
   }
 
+  void floatingBtnPressed() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton: const AddABFloatingBtn(),
+      floatingActionButton: AddABFloatingBtn(
+        onPress: floatingBtnPressed,
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -43,7 +49,8 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
               const SizedBox(
                 height: 70,
               ),
-              const ABGraph(),
+              // ignore: prefer_const_constructors
+              ABGraph(),
               const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,16 +65,10 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      ctrl.setRecentDateListToHive(dateList);
-                      setState(() {
-                        dataList =
-                            DateCalc.getDataList(dateList[0], dateList[1]);
-                      });
-                    },
-                    icon: const Icon(Icons.search),
-                  ),
+                  const Text("  -  ",
+                      style: TextStyle(
+                        fontSize: 30,
+                      )),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
@@ -141,6 +142,10 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
             DateFormat(ABDataController.DATE_FORMAT).format(selected);
       });
     }
+    ctrl.setRecentDateListToHive(dateList);
+    setState(() {
+      dataList = DateCalc.getDataList(dateList[0], dateList[1]);
+    });
   }
 }
 

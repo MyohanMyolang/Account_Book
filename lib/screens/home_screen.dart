@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 
 import '../widgets/add_ab_btn.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/detail');
+          onTap: () async {
+            await Navigator.pushNamed(context, '/detail');
+            setState(() {});
           },
-          child: const ABGraph(),
+          // ignore: prefer_const_constructors
+          child: ABGraph(),
         ),
       ),
       floatingActionButton: const AddABFloatingBtn(),

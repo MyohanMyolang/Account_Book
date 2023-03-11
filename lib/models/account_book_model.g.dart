@@ -17,7 +17,7 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ABModel(
-      isExpanse: fields[0] as bool,
+      isExpense: fields[0] as bool,
       index: fields[1] as int,
       money: fields[2] as int,
       descript: fields[3] as String,
@@ -30,7 +30,7 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.isExpanse)
+      ..write(obj.isExpense)
       ..writeByte(1)
       ..write(obj.index)
       ..writeByte(2)

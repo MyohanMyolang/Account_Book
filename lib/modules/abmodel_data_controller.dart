@@ -124,6 +124,17 @@ class ABDataController {
     return dates;
   }
 
+  int getTotalExpense(DataList data) {
+    int totalExpanse = 0;
+    for (String key in data.keys) {
+      totalExpanse += data[key]!.map((model) {
+        if (model.isExpense) return model.money;
+        return model.money * -1;
+      }).reduce((a, b) => a + b);
+    }
+    return totalExpanse;
+  }
+
   void removeData(ABModel data) {}
 
   void _removeItemToDataList(int index) {}

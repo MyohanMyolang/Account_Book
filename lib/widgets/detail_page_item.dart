@@ -31,7 +31,7 @@ class _DetailItemState extends State<DetailItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.model.isExpanse ? "지출" : "수입"),
+              Text(widget.model.isExpense ? "지출" : "수입"),
               Text(nf.format(widget.model.money)),
               Text(widget.model.date),
             ],

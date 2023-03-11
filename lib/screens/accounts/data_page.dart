@@ -33,12 +33,12 @@ class _DataPageState extends State<DataPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.type == DataPageType.modify) {
-      isExpanse = widget.model?.isExpanse;
+      isExpanse = widget.model?.isExpense;
       date = widget.model?.date;
     }
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        Navigator.pop(context, null);
 
         return true;
       },
@@ -141,7 +141,7 @@ class _DataPageState extends State<DataPage> {
                                 Navigator.pop(
                                   context,
                                   ABModel(
-                                    isExpanse: isExpanse!,
+                                    isExpense: isExpanse!,
                                     index: ABDataController().index,
                                     money: money,
                                     descript: _desCtrl.text,

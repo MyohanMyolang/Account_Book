@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../models/account_book_model.dart';
 
 class AddABFloatingBtn extends StatelessWidget {
+  final VoidCallback? onPress;
   const AddABFloatingBtn({
     super.key,
+    this.onPress,
   });
 
   @override
@@ -22,6 +24,7 @@ class AddABFloatingBtn extends StatelessWidget {
         }
         ABDataController().showAllDateListKeys();
         //ABDataController().removeAllData();
+        if (onPress != null) onPress!();
       },
       tooltip: "Add AB", // ShowAdd Account Book Add Page
       child: const Icon(Icons.add),
