@@ -127,17 +127,28 @@ class ABDataController {
   int getTotalExpense(DataList data) {
     int totalExpanse = 0;
     for (String key in data.keys) {
-      totalExpanse += data[key]!.map((model) {
+      var list = data[key]!.map((model) {
         if (model.isExpense) return model.money;
         return model.money * -1;
-      }).reduce((a, b) => a + b);
+      });
+      if(list.length != 0){
+        
+      }
     }
     return totalExpanse;
   }
 
-  void removeData(ABModel data) {}
+  void removeData(ABModel data) {
+    _dataList[data.date]?.remove(data);
+    _removeItemToHive(data);
+  }
 
-  void _removeItemToDataList(int index) {}
+  void _removeItemToHive(ABModel data) {
+    List<int> dateList = modelBox.get(data.date, defaultValue: []);
+    dateList.remove(data.index);
+    modelBox.put(data.date, dateList);
+    modelBox.delete("${data.index}");
+  }
 
   void _modifyDataToHive(ABModel data) {}
 

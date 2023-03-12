@@ -34,6 +34,14 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     setState(() {});
   }
 
+  void onItemRemove(ABModel model) {
+    dataList[model.date]?.remove(model);
+
+    setState(() {});
+  }
+
+  void onItemModify(ABModel model) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +124,11 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
                     itemCount: modelList.length,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
-                      return DetailItem(model: modelList[index]);
+                      return DetailItem(
+                        model: modelList[index],
+                        onModify: onItemModify,
+                        onRemove: onItemRemove,
+                      );
                     },
                   );
                 },
