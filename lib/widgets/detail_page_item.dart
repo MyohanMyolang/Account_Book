@@ -4,7 +4,14 @@ import 'package:intl/intl.dart';
 
 class DetailItem extends StatefulWidget {
   final ABModel model;
-  const DetailItem({super.key, required this.model});
+  VoidCallback onRemove;
+  VoidCallback onModify;
+  const DetailItem({
+    super.key,
+    required this.model,
+    required this.onModify,
+    required this.onRemove,
+  });
 
   @override
   State<DetailItem> createState() => _DetailItemState();
@@ -58,7 +65,10 @@ class _DetailItemState extends State<DetailItem> {
                         isShowDes = !isShowDes;
                       });
                     },
-                    icon: const Icon(Icons.description),
+                    icon: const Icon(
+                      Icons.description,
+                      color: Colors.blue,
+                    ),
                     tooltip: "Show Description",
                   ),
                   IconButton(
@@ -67,8 +77,13 @@ class _DetailItemState extends State<DetailItem> {
                     tooltip: "Edit Item",
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.remove_circle),
+                    onPressed: () {
+                      // ctrl.delete
+                    },
+                    icon: const Icon(
+                      Icons.remove_circle,
+                      color: Colors.red,
+                    ),
                     tooltip: "Remove Item",
                   ),
                 ],
