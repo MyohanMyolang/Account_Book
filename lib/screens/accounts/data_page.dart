@@ -33,13 +33,19 @@ class _DataPageState extends State<DataPage> {
   final TextEditingController _desCtrl = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
     if (widget.type == DataPageType.modify && widget.model != null) {
       isExpanse = widget.model!.isExpense;
       date = widget.model!.date;
       _moneyCtrl.text = widget.model!.money.toString();
       _desCtrl.text = widget.model!.descript;
     }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, null);

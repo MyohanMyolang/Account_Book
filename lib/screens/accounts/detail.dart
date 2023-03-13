@@ -44,8 +44,13 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
   void onItemModify(ABModel oldData, ABModel newData) {
     int? eleIndex = dataList[oldData.date]?.indexOf(oldData);
     if (eleIndex != null) {
-      dataList[oldData.date]?[eleIndex] = newData;
-      ctrl.modifyData(newData);
+      if (oldData.date == newData.date) {
+        ctrl.modifyData(newData);
+      } else {
+        ctrl.modifyData(newData, oldData);
+        dataList = DateCalc.getDataList(dateList[0], dateList[1]);
+      }
+      // dataList[oldData.date][eleIndex] = newData;
       setState(() {});
     }
   }

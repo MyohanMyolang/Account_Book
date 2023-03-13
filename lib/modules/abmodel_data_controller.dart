@@ -143,21 +143,40 @@ class ABDataController {
   }
 
   void _removeDataToHive(ABModel data) {
-    List<int> dateList = modelBox.get(data.date, defaultValue: []);
+    List<int> dateList = modelBox.get(data.date, defaultValue: <int>[]);
     dateList.remove(data.index);
     modelBox.put(data.date, dateList);
     modelBox.delete("${data.index}");
   }
 
-  void modifyData(ABModel data) {
+  void modifyData(ABModel data, [ABModel? oldData]) {
     _modifyDataToHive(data);
+    if (oldData != null) {
+      bool isHas = checkHasData(data.date);
+      isHas ? _dataList[data.date]!.add(data) : _dataList[data.date] = [data];
+      _dataList[oldData.date]?.remove(oldData);
+      _modifyIndexListToHive(
+          index: data.index, oldDate: oldData.date, newDate: data.date);
+    }
   }
 
   void _modifyDataToHive(ABModel data) {
     modelBox.put("${data.index}", data);
   }
 
-  void _modifyIndexListToHive(ABModel data) {}
+  void _modifyIndexListToHive({
+    required int index,
+    required String newDate,
+    required String oldDate,
+  }) {
+    List<int>? dateList = modelBox.get(oldDate);
+    dateList?.remove(index);
+    modelBox.put(oldDate, dateList);
+
+    List<int>? newDateList = modelBox.get(newDate, defaultValue: <int>[]);
+    newDateList?.add(index);
+    modelBox.put(newDate, newDateList);
+  }
 
   // 이하 Test용 추후 삭제
   void removeAllData() {
