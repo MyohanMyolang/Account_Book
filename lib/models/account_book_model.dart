@@ -5,7 +5,7 @@ part 'account_book_model.g.dart';
 @HiveType(typeId: 0)
 class ABModel {
   @HiveField(0)
-  late bool isExpanse;
+  late bool isExpense;
   @HiveField(1)
   late int index;
   @HiveField(2)
@@ -13,41 +13,36 @@ class ABModel {
   @HiveField(3)
   late String descript;
   @HiveField(4)
-  late String category;
-  @HiveField(5)
   late String date;
 
   ABModel({
-    required this.isExpanse,
+    required this.isExpense,
     required this.index,
     required this.money,
     required this.descript,
-    required this.category,
     required this.date,
   });
 
   ABModel.fromJson(Map<String, dynamic> data)
-      : isExpanse = data["isExpanse"],
+      : isExpense = data["isExpense"],
         index = data["index"],
         money = data["money"],
         descript = data["descript"],
-        category = data["category"],
         date = data["date"];
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {};
-    data["isExpanse"] = isExpanse;
+    data["isExpense"] = isExpense;
     data["index"] = index;
     data["money"] = money;
     data["descript"] = descript;
-    data["category"] = category;
     data["date"] = date;
     return data;
   }
 
   @override
   String toString() {
-    return 'ABModel{isExpanse: $isExpanse, index: $index, money: $money, descript: $descript, category: $category, date: $date}';
+    return 'ABModel{isExpense: $isExpense, index: $index, money: $money, descript: $descript, date: $date}';
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:account_book/models/account_book_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 typedef DataList = Map<String, List<ABModel>>;
 
@@ -25,14 +26,12 @@ class ABDataController {
     }
   }
 
-  void init() async {
+  Future<void> init() async {
     await _hiveInit();
     _dataList = {};
   }
 
-  ABDataController._() {
-    init();
-  }
+  ABDataController._();
 
   factory ABDataController() {
     return _instance;
@@ -83,15 +82,17 @@ class ABDataController {
     bool hasData = checkHasData(data.date);
     if (hasData) {
       _dataList[data.date]!.add(data);
-      modelBox.put("${data.index}", data);
 
       List<int> dateList = modelBox.get(data.date, defaultValue: []);
       dateList.add(data.index);
       modelBox.put(data.date, dateList);
     } else {
       _dataList[data.date] = [data];
-      modelBox.put(data.date, [data.index]);
+      List<int> indexList = [];
+      indexList.add(data.index);
+      modelBox.put(data.date, indexList);
     }
+    modelBox.put("${data.index}", data);
     index++;
     modelBox.put("index", index);
   }
@@ -108,13 +109,51 @@ class ABDataController {
     return null;
   }
 
+  void setRecentDateListToHive(List<String> dates) {
+    modelBox.put("recentDates", dates);
+  }
+
+  List<String> getRecentDateListFromHive() {
+    List<String>? dates = modelBox.get("recentDates");
+    if (dates != null) return dates;
+
+    dates = [];
+    dates.add(DateFormat(DATE_FORMAT).format(DateTime.now()));
+    dates.add(DateFormat(DATE_FORMAT).format(DateTime.now()));
+
+    return dates;
+  }
+
+  int getTotalExpense(DataList data) {
+    int totalExpanse = 0;
+    for (String key in data.keys) {
+      totalExpanse += data[key]!.map((model) {
+        if (model.isExpense) return model.money;
+        return model.money * -1;
+      }).reduce((a, b) => a + b);
+    }
+    return totalExpanse;
+  }
+
+  void removeData(ABModel data) {}
+
+  void _removeItemToDataList(int index) {}
+
+  void _modifyDataToHive(ABModel data) {}
+
+  void _modifyIndexListToHive(ABModel data) {}
+
   // 이하 Test용 추후 삭제
   void removeAllData() {
     modelBox.clear();
   }
 
   void showAllDateListKeys() {
+    getDayDatas("23/03/08");
     print(_dataList.keys.toList());
+    for (var key in _dataList.keys) {
+      print(_dataList[key]);
+    }
   }
 }
 

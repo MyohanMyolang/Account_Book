@@ -17,21 +17,20 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ABModel(
-      isExpanse: fields[0] as bool,
+      isExpense: fields[0] as bool,
       index: fields[1] as int,
       money: fields[2] as int,
       descript: fields[3] as String,
-      category: fields[4] as String,
-      date: fields[5] as String,
+      date: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ABModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.isExpanse)
+      ..write(obj.isExpense)
       ..writeByte(1)
       ..write(obj.index)
       ..writeByte(2)
@@ -39,8 +38,6 @@ class ABModelAdapter extends TypeAdapter<ABModel> {
       ..writeByte(3)
       ..write(obj.descript)
       ..writeByte(4)
-      ..write(obj.category)
-      ..writeByte(5)
       ..write(obj.date);
   }
 
