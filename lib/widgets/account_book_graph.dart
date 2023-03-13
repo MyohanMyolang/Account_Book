@@ -22,7 +22,6 @@ class _ABGraphState extends State<ABGraph> {
 
   @override
   Widget build(BuildContext context) {
-    print("build Test");
     dateList = ctrl.getRecentDateListFromHive();
     dataList = DateCalc.getDataList(dateList[0], dateList[1]);
     return Column(

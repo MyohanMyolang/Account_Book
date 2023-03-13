@@ -53,7 +53,12 @@ class _DetailItemState extends State<DetailItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15),
-                    const Text("Description"),
+                    const Text(
+                      "Description",
+                      style: TextStyle(
+                        color: Colors.teal,
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     Text(widget.model.descript),
                   ],

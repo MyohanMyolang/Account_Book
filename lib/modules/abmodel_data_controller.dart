@@ -125,17 +125,17 @@ class ABDataController {
   }
 
   int getTotalExpense(DataList data) {
-    int totalExpanse = 0;
+    int totalExpense = 0;
     for (String key in data.keys) {
       var list = data[key]!.map((model) {
         if (model.isExpense) return model.money;
         return model.money * -1;
       });
-      if(list.length != 0){
-        
+      if (list.isNotEmpty) {
+        totalExpense = list.reduce((value, element) => value + element);
       }
     }
-    return totalExpanse;
+    return totalExpense;
   }
 
   void removeData(ABModel data) {

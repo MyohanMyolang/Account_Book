@@ -36,6 +36,7 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
 
   void onItemRemove(ABModel model) {
     dataList[model.date]?.remove(model);
+    ctrl.removeData(model);
 
     setState(() {});
   }
