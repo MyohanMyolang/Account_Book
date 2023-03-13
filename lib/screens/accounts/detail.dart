@@ -46,11 +46,15 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     if (eleIndex != null) {
       if (oldData.date == newData.date) {
         ctrl.modifyData(newData);
+        dataList[oldData.date]![eleIndex] = newData;
       } else {
+        int firstInt = int.parse(dateList[0].replaceAll('/', ""));
+        int newDateInt = int.parse(newData.date.replaceAll('/', ""));
+        if (firstInt > newDateInt) {
+          dataList[oldData.date]!.remove(oldData);
+        }
         ctrl.modifyData(newData, oldData);
-        dataList = DateCalc.getDataList(dateList[0], dateList[1]);
       }
-      // dataList[oldData.date][eleIndex] = newData;
       setState(() {});
     }
   }

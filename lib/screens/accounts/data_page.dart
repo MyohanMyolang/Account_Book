@@ -34,7 +34,6 @@ class _DataPageState extends State<DataPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.type == DataPageType.modify && widget.model != null) {
       isExpanse = widget.model!.isExpense;
       date = widget.model!.date;
@@ -148,6 +147,7 @@ class _DataPageState extends State<DataPage> {
                                   _moneyCtrl.text.replaceAll(RegExp('\\D'), "");
                               if (moneyText != "") {
                                 int money = int.parse(moneyText);
+                                print(_desCtrl.text);
                                 Navigator.pop(
                                   context,
                                   ABModel(
