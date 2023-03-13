@@ -29,12 +29,16 @@ class DataPage extends StatefulWidget {
 class _DataPageState extends State<DataPage> {
   bool? isExpanse = true;
   String? date;
+  final TextEditingController _moneyCtrl = TextEditingController();
+  final TextEditingController _desCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == DataPageType.modify) {
-      isExpanse = widget.model?.isExpense;
-      date = widget.model?.date;
+    if (widget.type == DataPageType.modify && widget.model != null) {
+      isExpanse = widget.model!.isExpense;
+      date = widget.model!.date;
+      _moneyCtrl.text = widget.model!.money.toString();
+      _desCtrl.text = widget.model!.descript;
     }
     return WillPopScope(
       onWillPop: () async {
@@ -142,7 +146,9 @@ class _DataPageState extends State<DataPage> {
                                   context,
                                   ABModel(
                                     isExpense: isExpanse!,
-                                    index: ABDataController().index,
+                                    index: DataPageType.modify == widget.type
+                                        ? widget.model!.index
+                                        : ABDataController().index,
                                     money: money,
                                     descript: _desCtrl.text,
                                     date: date!,
@@ -198,9 +204,6 @@ class _DataPageState extends State<DataPage> {
       });
     }
   }
-
-  final TextEditingController _moneyCtrl = TextEditingController();
-  final TextEditingController _desCtrl = TextEditingController();
 
   TextField CustomTextField(String label, String hintText, TextInputType type,
       TextEditingController ctrl) {

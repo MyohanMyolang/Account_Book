@@ -1,13 +1,15 @@
 import 'package:account_book/models/account_book_model.dart';
+import 'package:account_book/screens/accounts/data_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-typedef ItemBtnFunc = void Function(ABModel);
+typedef RemoveItemBtnFunc = void Function(ABModel);
+typedef ModifyItemBtnFunc = void Function(ABModel, ABModel);
 
 class DetailItem extends StatefulWidget {
   final ABModel model;
-  final ItemBtnFunc onRemove;
-  final ItemBtnFunc onModify;
+  final RemoveItemBtnFunc onRemove;
+  final ModifyItemBtnFunc onModify;
   const DetailItem({
     super.key,
     required this.model,
@@ -79,7 +81,20 @@ class _DetailItemState extends State<DetailItem> {
                     tooltip: "Show Description",
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      ABModel? model = await Navigator.push<ABModel?>(
+                        context,
+                        MaterialPageRoute<ABModel?>(
+                          builder: (context) => DataPage(
+                            type: DataPageType.modify,
+                            model: widget.model,
+                          ),
+                        ),
+                      );
+                      if (model != null) {
+                        widget.onModify(widget.model, model);
+                      }
+                    },
                     icon: const Icon(Icons.edit),
                     tooltip: "Edit Item",
                   ),

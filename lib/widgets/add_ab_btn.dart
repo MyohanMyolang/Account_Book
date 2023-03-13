@@ -22,7 +22,7 @@ class AddABFloatingBtn extends StatelessWidget {
         if (model != null) {
           ABDataController().addData(model);
         }
-        ABDataController().showAllDateListKeys();
+        //ABDataController().showAllDateListKeys();
         //ABDataController().removeAllData();
         if (onPress != null) onPress!();
       },

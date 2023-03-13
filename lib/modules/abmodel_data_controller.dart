@@ -132,25 +132,30 @@ class ABDataController {
         return model.money * -1;
       });
       if (list.isNotEmpty) {
-        totalExpense = list.reduce((value, element) => value + element);
+        totalExpense += list.reduce((value, element) => value + element);
       }
     }
     return totalExpense;
   }
 
   void removeData(ABModel data) {
-    _dataList[data.date]?.remove(data);
-    _removeItemToHive(data);
+    _removeDataToHive(data);
   }
 
-  void _removeItemToHive(ABModel data) {
+  void _removeDataToHive(ABModel data) {
     List<int> dateList = modelBox.get(data.date, defaultValue: []);
     dateList.remove(data.index);
     modelBox.put(data.date, dateList);
     modelBox.delete("${data.index}");
   }
 
-  void _modifyDataToHive(ABModel data) {}
+  void modifyData(ABModel data) {
+    _modifyDataToHive(data);
+  }
+
+  void _modifyDataToHive(ABModel data) {
+    modelBox.put("${data.index}", data);
+  }
 
   void _modifyIndexListToHive(ABModel data) {}
 

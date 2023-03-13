@@ -34,14 +34,21 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
     setState(() {});
   }
 
-  void onItemRemove(ABModel model) {
-    dataList[model.date]?.remove(model);
-    ctrl.removeData(model);
+  void onItemRemove(ABModel data) {
+    dataList[data.date]?.remove(data);
+    ctrl.removeData(data);
 
     setState(() {});
   }
 
-  void onItemModify(ABModel model) {}
+  void onItemModify(ABModel oldData, ABModel newData) {
+    int? eleIndex = dataList[oldData.date]?.indexOf(oldData);
+    if (eleIndex != null) {
+      dataList[oldData.date]?[eleIndex] = newData;
+      ctrl.modifyData(newData);
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
