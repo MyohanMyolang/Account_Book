@@ -125,23 +125,58 @@ class ABDataController {
   }
 
   int getTotalExpense(DataList data) {
-    int totalExpanse = 0;
+    int totalExpense = 0;
     for (String key in data.keys) {
-      totalExpanse += data[key]!.map((model) {
+      var list = data[key]!.map((model) {
         if (model.isExpense) return model.money;
         return model.money * -1;
-      }).reduce((a, b) => a + b);
+      });
+      if (list.isNotEmpty) {
+        totalExpense += list.reduce((value, element) => value + element);
+      }
     }
-    return totalExpanse;
+    return totalExpense;
   }
 
-  void removeData(ABModel data) {}
+  void removeData(ABModel data) {
+    _removeDataToHive(data);
+  }
 
-  void _removeItemToDataList(int index) {}
+  void _removeDataToHive(ABModel data) {
+    List<int> dateList = modelBox.get(data.date, defaultValue: <int>[]);
+    dateList.remove(data.index);
+    modelBox.put(data.date, dateList);
+    modelBox.delete("${data.index}");
+  }
 
-  void _modifyDataToHive(ABModel data) {}
+  void modifyData(ABModel data, [ABModel? oldData]) {
+    _modifyDataToHive(data);
+    if (oldData != null) {
+      bool isHas = checkHasData(data.date);
+      isHas ? _dataList[data.date]!.add(data) : _dataList[data.date] = [data];
+      _dataList[oldData.date]?.remove(oldData);
+      _modifyIndexListToHive(
+          index: data.index, oldDate: oldData.date, newDate: data.date);
+    }
+  }
 
-  void _modifyIndexListToHive(ABModel data) {}
+  void _modifyDataToHive(ABModel data) {
+    modelBox.put("${data.index}", data);
+  }
+
+  void _modifyIndexListToHive({
+    required int index,
+    required String newDate,
+    required String oldDate,
+  }) {
+    List<int>? dateList = modelBox.get(oldDate);
+    dateList?.remove(index);
+    modelBox.put(oldDate, dateList);
+
+    List<int>? newDateList = modelBox.get(newDate, defaultValue: <int>[]);
+    newDateList?.add(index);
+    modelBox.put(newDate, newDateList);
+  }
 
   // 이하 Test용 추후 삭제
   void removeAllData() {

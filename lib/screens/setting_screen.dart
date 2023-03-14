@@ -1,3 +1,4 @@
+import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -5,9 +6,13 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Setting"),
+        child: TextButton(
+            onPressed: () {
+              ABDataController().removeAllData();
+            },
+            child: const Text("Remove All Hive")),
       ),
     );
   }

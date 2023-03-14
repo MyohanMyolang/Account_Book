@@ -36,7 +36,8 @@ class _ABGraphState extends State<ABGraph> {
           style: TextStyle(fontSize: 22),
         ),
         Text(
-          nf.format(ctrl.getTotalExpense(dataList)),
+          nf.format(ctrl.getTotalExpense(
+              dataList)), // -일 경우 money의 수익이 있습니다. / +일 경우 money의 지출이 발생하였습니다.
           style: const TextStyle(fontSize: 22),
         )
       ],

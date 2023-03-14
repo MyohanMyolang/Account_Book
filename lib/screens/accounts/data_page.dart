@@ -29,13 +29,22 @@ class DataPage extends StatefulWidget {
 class _DataPageState extends State<DataPage> {
   bool? isExpanse = true;
   String? date;
+  final TextEditingController _moneyCtrl = TextEditingController();
+  final TextEditingController _desCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.type == DataPageType.modify && widget.model != null) {
+      isExpanse = widget.model!.isExpense;
+      date = widget.model!.date;
+      _moneyCtrl.text = widget.model!.money.toString();
+      _desCtrl.text = widget.model!.descript;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == DataPageType.modify) {
-      isExpanse = widget.model?.isExpense;
-      date = widget.model?.date;
-    }
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, null);
@@ -138,11 +147,14 @@ class _DataPageState extends State<DataPage> {
                                   _moneyCtrl.text.replaceAll(RegExp('\\D'), "");
                               if (moneyText != "") {
                                 int money = int.parse(moneyText);
+                                print(_desCtrl.text);
                                 Navigator.pop(
                                   context,
                                   ABModel(
                                     isExpense: isExpanse!,
-                                    index: ABDataController().index,
+                                    index: DataPageType.modify == widget.type
+                                        ? widget.model!.index
+                                        : ABDataController().index,
                                     money: money,
                                     descript: _desCtrl.text,
                                     date: date!,
@@ -198,9 +210,6 @@ class _DataPageState extends State<DataPage> {
       });
     }
   }
-
-  final TextEditingController _moneyCtrl = TextEditingController();
-  final TextEditingController _desCtrl = TextEditingController();
 
   TextField CustomTextField(String label, String hintText, TextInputType type,
       TextEditingController ctrl) {
