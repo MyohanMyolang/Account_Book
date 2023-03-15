@@ -1,4 +1,5 @@
 import 'package:account_book/modules/abmodel_data_controller.dart';
+import 'package:account_book/widgets/drop_down_category.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -116,6 +117,8 @@ class _DataPageState extends State<DataPage> {
                       ],
                     ),
                     const SizedBox(height: 15),
+                    const DropDownCate(),
+                    const SizedBox(height: 15),
                     Row(
                       children: [
                         Expanded(
@@ -147,7 +150,6 @@ class _DataPageState extends State<DataPage> {
                                   _moneyCtrl.text.replaceAll(RegExp('\\D'), "");
                               if (moneyText != "") {
                                 int money = int.parse(moneyText);
-                                print(_desCtrl.text);
                                 Navigator.pop(
                                   context,
                                   ABModel(
@@ -158,6 +160,7 @@ class _DataPageState extends State<DataPage> {
                                     money: money,
                                     descript: _desCtrl.text,
                                     date: date!,
+                                    category: "일단 임시",
                                   ),
                                 );
                               } else {

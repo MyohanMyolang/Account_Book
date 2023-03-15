@@ -14,6 +14,8 @@ class ABModel {
   late String descript;
   @HiveField(4)
   late String date;
+  @HiveField(5)
+  late String category;
 
   ABModel({
     required this.isExpense,
@@ -21,6 +23,7 @@ class ABModel {
     required this.money,
     required this.descript,
     required this.date,
+    required this.category,
   });
 
   ABModel.fromJson(Map<String, dynamic> data)
@@ -28,7 +31,8 @@ class ABModel {
         index = data["index"],
         money = data["money"],
         descript = data["descript"],
-        date = data["date"];
+        date = data["date"],
+        category = data["category"];
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {};
@@ -37,12 +41,13 @@ class ABModel {
     data["money"] = money;
     data["descript"] = descript;
     data["date"] = date;
+    data["category"] = category;
     return data;
   }
 
   @override
   String toString() {
-    return 'ABModel{isExpense: $isExpense, index: $index, money: $money, descript: $descript, date: $date}';
+    return 'ABModel{isExpense: $isExpense, index: $index, money: $money, descript: $descript, date: $date, category: $category}';
   }
 }
 

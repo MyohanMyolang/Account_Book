@@ -9,6 +9,7 @@ class ABDataController {
   late final Box modelBox;
   late int index;
   static const String DATE_FORMAT = "yy/MM/dd";
+  late List<String> categories;
 
   static final ABDataController _instance = ABDataController._();
 
@@ -24,6 +25,13 @@ class ABDataController {
       modelBox.put("index", 0);
       index = 0;
     }
+    List<String>? isHasCategories = modelBox.get("categories");
+    if (isHasCategories != null) {
+      categories = isHasCategories;
+    } else {
+      modelBox.put("categories", <String>[]);
+      categories = <String>[];
+    }
   }
 
   Future<void> init() async {
@@ -36,6 +44,18 @@ class ABDataController {
   factory ABDataController() {
     return _instance;
   }
+
+  void addCategory(String category) {
+    categories.add(category);
+    modelBox.put("categories", categories);
+  }
+
+  void removeCategory(String category) {
+    categories.remove(category);
+    modelBox.put("categories", categories);
+  }
+
+  List<String> getCategories() => categories.toList();
 
   bool _getDayDataFromHive(String date) {
     List<int>? indexList = modelBox.get(date);
@@ -216,3 +236,8 @@ class ABDataController {
   이후 그 List를 값으로 불러온 후 Index에 있는 것들을 Hive로 값을 불러온다.
 
 */
+
+/*
+ * 추후 코드 refactoring 할 때 Hive부분을 다른 class로 분리 시킨다.
+ *  
+ */
