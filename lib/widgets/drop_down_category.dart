@@ -14,7 +14,19 @@ class _DropDownCateState extends State<DropDownCate> {
   @override
   void initState() {
     // categories = ABDataController().getCategories();
-    categories = ["a", "b", "c", "d", "e", "f"];
+    categories = [
+      "일단",
+      "아무",
+      "거나",
+      "넣어보자",
+      "일단은",
+      "아무거나",
+      "아무",
+      "거나",
+      "넣어보자",
+      "일단은",
+      "아무거나"
+    ];
     super.initState();
   }
 
@@ -28,51 +40,91 @@ class _DropDownCateState extends State<DropDownCate> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 7,
-              child: Center(
-                child: categories.isEmpty
-                    ? const Text("Add Btn")
-                    : TextButton(
-                        onPressed: () {
-                          setState(() {
-                            isClosed = false;
-                          });
-                        },
-                        child: Text(categories[0]),
-                      ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isClosed = !isClosed;
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 9,
+                child: Center(
+                  child: categories.isEmpty
+                      ? const Text("Add Btn")
+                      : Text(
+                          categories[0],
+                          style: const TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                ),
               ),
-            ),
-            Flexible(
-              flex: 3,
-              child: isClosed
-                  ? const Icon(Icons.arrow_drop_down)
-                  : const Icon(Icons.arrow_drop_up),
-            ),
-          ],
+              Flexible(
+                flex: 1,
+                child: isClosed
+                    ? const Icon(Icons.arrow_drop_down)
+                    : const Icon(Icons.arrow_drop_up),
+              ),
+            ],
+          ),
         ),
-        createMenuItems(),
+        const SizedBox(height: 15),
+        SingleChildScrollView(
+          child: SizedBox(
+            height: isClosed ? 0 : 68 * (3),
+            child: createMenuItems(),
+          ),
+        ),
       ],
     );
   }
 
   Widget createMenuItems() {
     if (!isClosed && categories.length >= 2) {
-      return ListView.builder(
+      return ListView.separated(
         itemCount: categories.length - 1,
         itemBuilder: (context, index) {
-          return Text(categories[index + 1]);
+          return Expanded(
+            child: createItem(categories[index + 1]),
+          );
         },
+        separatorBuilder: (context, index) => const SizedBox(height: 15),
       );
     }
 
     return const SizedBox();
   }
 
-  Widget createItem() {
-    return Row();
+  Widget createItem(String item) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 9,
+          child: Center(
+            child: TextButton(
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.remove_circle_outline,
+                color: Colors.red,
+              )),
+        ),
+      ],
+    );
   }
 }
