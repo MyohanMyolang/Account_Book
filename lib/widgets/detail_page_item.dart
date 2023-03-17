@@ -3,6 +3,8 @@ import 'package:account_book/screens/accounts/data_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'modals.dart';
+
 typedef RemoveItemBtnFunc = void Function(ABModel);
 typedef ModifyItemBtnFunc = void Function(ABModel, ABModel);
 
@@ -100,43 +102,7 @@ class _DetailItemState extends State<DetailItem> {
                   ),
                   IconButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text(
-                              "정말로 삭제 하시겠습니까?",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: const [
-                                  Text('삭제하시기를 원하시면 확인 버튼을 눌러주세요.')
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  widget.onRemove(widget.model);
-                                },
-                                child: const Text(
-                                  "확인",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("취소"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      Modals.showRemoveModal((){widget.onRemove(widget.model);}, context)
                     },
                     icon: const Icon(
                       Icons.remove_circle,

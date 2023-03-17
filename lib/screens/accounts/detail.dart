@@ -123,6 +123,7 @@ class _AccountBookDetailState extends State<AccountBookDetail> {
                     Text("지출"),
                     Text("금액"),
                     Text("날짜"),
+                    Text("카테고리"),
                   ],
                 ),
               ),

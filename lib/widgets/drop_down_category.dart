@@ -1,7 +1,12 @@
+import 'package:account_book/widgets/modals.dart';
 import 'package:flutter/material.dart';
 
 class DropDownCate extends StatefulWidget {
-  const DropDownCate({super.key});
+  final List<String> categories;
+  const DropDownCate({
+    super.key,
+    required this.categories,
+  });
 
   @override
   State<DropDownCate> createState() => _DropDownCateState();
@@ -9,24 +14,11 @@ class DropDownCate extends StatefulWidget {
 
 class _DropDownCateState extends State<DropDownCate> {
   bool isClosed = true;
-  List<String> categories = <String>[];
 
   @override
   void initState() {
     // categories = ABDataController().getCategories();
-    categories = [
-      "일단",
-      "아무",
-      "거나",
-      "넣어보자",
-      "일단은",
-      "아무거나",
-      "아무",
-      "거나",
-      "넣어보자",
-      "일단은",
-      "아무거나"
-    ];
+
     super.initState();
   }
 
@@ -52,10 +44,10 @@ class _DropDownCateState extends State<DropDownCate> {
               Flexible(
                 flex: 9,
                 child: Center(
-                  child: categories.isEmpty
+                  child: widget.categories.isEmpty
                       ? const Text("Add Btn")
                       : Text(
-                          categories[0],
+                          widget.categories[0],
                           style: const TextStyle(
                             fontSize: 24,
                           ),
@@ -73,22 +65,38 @@ class _DropDownCateState extends State<DropDownCate> {
         ),
         const SizedBox(height: 15),
         SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: SizedBox(
-            height: isClosed ? 0 : 68 * (3),
+            height: isClosed ? 0 : 68 * (widget.categories.length - 1),
             child: createMenuItems(),
           ),
         ),
+        if (!isClosed) createAddBtn(),
       ],
     );
   }
 
+  Widget createAddBtn() {
+    return TextButton(
+      onPressed: () {},
+      child: const Text(
+        "카테고리 추가",
+        style: TextStyle(
+          fontSize: 24,
+        ),
+      ),
+    );
+  }
+
   Widget createMenuItems() {
-    if (!isClosed && categories.length >= 2) {
+    if (!isClosed && widget.categories.length >= 2) {
       return ListView.separated(
-        itemCount: categories.length - 1,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.categories.length - 1,
         itemBuilder: (context, index) {
           return Expanded(
-            child: createItem(categories[index + 1]),
+            child: createItem(widget.categories[index + 1], index + 1),
           );
         },
         separatorBuilder: (context, index) => const SizedBox(height: 15),
@@ -98,33 +106,47 @@ class _DropDownCateState extends State<DropDownCate> {
     return const SizedBox();
   }
 
-  Widget createItem(String item) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 9,
-          child: Center(
-            child: TextButton(
-              child: Text(
-                item,
-                style: const TextStyle(
-                  fontSize: 24,
+  Widget createItem(String item, int index) {
+    return Container(
+      decoration: const BoxDecoration(border: Border(bottom: BorderSide())),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 9,
+            child: Center(
+              child: TextButton(
+                child: Text(
+                  item,
+                  style: const TextStyle(
+                    fontSize: 24,
+                  ),
                 ),
+                onPressed: () {
+                  String temp = widget.categories[0];
+                  widget.categories[0] = item;
+                  widget.categories[index] = temp;
+                  closeMenu();
+                },
               ),
-              onPressed: () {},
             ),
           ),
-        ),
-        Flexible(
-          flex: 1,
-          child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.remove_circle_outline,
-                color: Colors.red,
-              )),
-        ),
-      ],
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                onPressed: () {
+                  Modals.showRemoveModal(() {
+                    setState(() {
+                      widget.categories.remove(item);
+                    });
+                  }, context);
+                },
+                icon: const Icon(
+                  Icons.remove_circle_outline,
+                  color: Colors.red,
+                )),
+          ),
+        ],
+      ),
     );
   }
 }

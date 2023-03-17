@@ -32,6 +32,7 @@ class _DataPageState extends State<DataPage> {
   String? date;
   final TextEditingController _moneyCtrl = TextEditingController();
   final TextEditingController _desCtrl = TextEditingController();
+  List<String> categories = [];
 
   @override
   void initState() {
@@ -41,6 +42,19 @@ class _DataPageState extends State<DataPage> {
       _moneyCtrl.text = widget.model!.money.toString();
       _desCtrl.text = widget.model!.descript;
     }
+    categories = [
+      "일단",
+      "아무",
+      "거나",
+      "넣어보자",
+      "일단은",
+      "아무거나",
+      "아무",
+      "거나",
+      "넣어보자",
+      "일단은",
+      "아무거나"
+    ];
     super.initState();
   }
 
@@ -117,7 +131,7 @@ class _DataPageState extends State<DataPage> {
                       ],
                     ),
                     const SizedBox(height: 15),
-                    const DropDownCate(),
+                    DropDownCate(categories: categories),
                     const SizedBox(height: 15),
                     Row(
                       children: [
@@ -160,7 +174,7 @@ class _DataPageState extends State<DataPage> {
                                     money: money,
                                     descript: _desCtrl.text,
                                     date: date!,
-                                    category: "일단 임시",
+                                    category: categories[0],
                                   ),
                                 );
                               } else {
