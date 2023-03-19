@@ -47,6 +47,7 @@ class _DetailItemState extends State<DetailItem> {
               Text(widget.model.isExpense ? "지출" : "수입"),
               Text(nf.format(widget.model.money)),
               Text(widget.model.date),
+              Text(widget.model.category),
             ],
           ),
           Column(
@@ -102,7 +103,9 @@ class _DetailItemState extends State<DetailItem> {
                   ),
                   IconButton(
                     onPressed: () {
-                      Modals.showRemoveModal((){widget.onRemove(widget.model);}, context)
+                      Modals.showRemoveModal(() {
+                        widget.onRemove(widget.model);
+                      }, context);
                     },
                     icon: const Icon(
                       Icons.remove_circle,

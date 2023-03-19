@@ -1,5 +1,8 @@
+import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/widgets/modals.dart';
 import 'package:flutter/material.dart';
+
+// typedef AddFunc = void Function(String);
 
 class DropDownCate extends StatefulWidget {
   final List<String> categories;
@@ -14,11 +17,12 @@ class DropDownCate extends StatefulWidget {
 
 class _DropDownCateState extends State<DropDownCate> {
   bool isClosed = true;
+  late final ABDataController ctrl;
 
   @override
   void initState() {
     // categories = ABDataController().getCategories();
-
+    ctrl = ABDataController();
     super.initState();
   }
 
@@ -78,7 +82,12 @@ class _DropDownCateState extends State<DropDownCate> {
 
   Widget createAddBtn() {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        Modals.showAddCategoryModal((String text) {
+          widget.categories.add(text);
+          ctrl.addCategory(text);
+        }, context);
+      },
       child: const Text(
         "카테고리 추가",
         style: TextStyle(
@@ -135,6 +144,7 @@ class _DropDownCateState extends State<DropDownCate> {
             child: IconButton(
                 onPressed: () {
                   Modals.showRemoveModal(() {
+                    ctrl.removeCategory(item);
                     setState(() {
                       widget.categories.remove(item);
                     });

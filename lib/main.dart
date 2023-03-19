@@ -42,13 +42,13 @@ class _AccountBookState extends State<AccountBook> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: const Locale('ko', "KR"),
+      locale: const Locale('ko', 'KR'),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('ko', "KR"),
+        Locale('ko', 'KR'),
       ], // DatePicker에 한국어가 보이도록 하는 설정.
       routes: getRoutes,
       theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
