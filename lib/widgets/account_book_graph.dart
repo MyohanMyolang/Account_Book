@@ -1,7 +1,10 @@
 import 'package:account_book/modules/abmodel_data_controller.dart';
 import 'package:account_book/modules/date_calc.dart';
+import 'package:account_book/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../models/account_book_model.dart';
 
 class ABGraph extends StatefulWidget {
   const ABGraph({super.key});
@@ -20,6 +23,14 @@ class _ABGraphState extends State<ABGraph> {
     super.initState();
   }
 
+  List<List<ABModel>> convertMapToList() {
+    List<List<ABModel>> data = [];
+    dataList.forEach((key, value) {
+      data.add(value);
+    });
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     dateList = ctrl.getRecentDateListFromHive();
@@ -27,10 +38,7 @@ class _ABGraphState extends State<ABGraph> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          "추후 표 넣기",
-          style: TextStyle(fontSize: 28),
-        ),
+        BarChart(dataList: convertMapToList()),
         const Text(
           "Total Expense",
           style: TextStyle(fontSize: 22),

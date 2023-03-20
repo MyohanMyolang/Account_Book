@@ -39,7 +39,7 @@ class _DropDownCateState extends State<DropDownCate> {
         GestureDetector(
           onTap: () {
             setState(() {
-              isClosed = !isClosed;
+              if (widget.categories.isNotEmpty) isClosed = !isClosed;
             });
           },
           child: Row(
@@ -49,7 +49,7 @@ class _DropDownCateState extends State<DropDownCate> {
                 flex: 9,
                 child: Center(
                   child: widget.categories.isEmpty
-                      ? const Text("Add Btn")
+                      ? createAddBtn()
                       : Text(
                           widget.categories[0],
                           style: const TextStyle(
@@ -86,6 +86,7 @@ class _DropDownCateState extends State<DropDownCate> {
         Modals.showAddCategoryModal((String text) {
           widget.categories.add(text);
           ctrl.addCategory(text);
+          setState(() {});
         }, context);
       },
       child: const Text(

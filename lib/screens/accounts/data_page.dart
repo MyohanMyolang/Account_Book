@@ -42,19 +42,7 @@ class _DataPageState extends State<DataPage> {
       _moneyCtrl.text = widget.model!.money.toString();
       _desCtrl.text = widget.model!.descript;
     }
-    categories = [
-      "일단",
-      "아무",
-      "거나",
-      "넣어보자",
-      "일단은",
-      "아무거나",
-      "아무",
-      "거나",
-      "넣어보자",
-      "일단은",
-      "아무거나"
-    ];
+    categories = ABDataController().getCategories();
     super.initState();
   }
 
